@@ -1,0 +1,73 @@
+<div class="login-container">
+  <div class="login-card card">
+    <div class="login-header">
+      <div class="logo-icon">
+        <mat-icon>lock</mat-icon>
+      </div>
+      <h1>Bem-vindo de volta</h1>
+      <p class="muted">Faça login para acessar o dashboard</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()" class="login-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="seu@email.com"
+          required
+          [disabled]="loading"
+        />
+        <mat-icon matPrefix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          [disabled]="loading"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [disabled]="loading"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="login-button"
+        [disabled]="loading"
+      >
+        <mat-spinner
+          *ngIf="loading"
+          diameter="20"
+          class="spinner"
+        ></mat-spinner>
+        <span *ngIf="!loading">Entrar</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p class="muted">
+        Não tem uma conta? Entre em contato com o administrador
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,231 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.product-image {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--border);
+}
+
+.mat-cell.description-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.add-button {
+  margin-top: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  color: white !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.add-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.add-button mat-icon {
+  margin-right: 8px;
+}
+
+.mat-column-image {
+  max-width: 90px;
+  padding-right: 16px !important;
+}
+
+.mat-column-actions {
+  max-width: 140px;
+  text-align: right;
+}
+
+/* Modern table with glassmorphism */
+.mat-table {
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  background: transparent !important;
+}
+
+.mat-header-row {
+  height: 56px;
+  background: transparent !important;
+}
+
+.mat-row {
+  background: var(--surface-elevated);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 80px;
+}
+
+.mat-row:hover {
+  transform: translateX(8px) scale(1.01);
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.2);
+  border-color: rgba(14, 165, 233, 0.4);
+  background: var(--surface-elevated);
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 16px 20px;
+  vertical-align: middle;
+  border: none !important;
+}
+
+.mat-header-cell {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: transparent !important;
+}
+
+.mat-cell {
+  color: #f1f5f9;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* Price styling */
+.mat-column-price .mat-cell {
+  font-weight: 600;
+  color: var(--accent-light);
+}
+
+/* Name column emphasis */
+.mat-column-name .mat-cell {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Products header */
+.products-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Back button */
+.back-button {
+  width: 48px;
+  height: 48px;
+  background: var(--surface) !important;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: var(--surface-elevated) !important;
+  transform: translateX(-4px);
+}
+
+.back-button mat-icon {
+  color: var(--primary-light);
+}
+
+/* Logout button */
+.logout-button {
+  border-color: var(--border) !important;
+  color: var(--text-secondary) !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background: var(--surface) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-light) !important;
+  transform: translateY(-2px);
+}
+
+.logout-button mat-icon {
+  margin-right: 8px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.products-header .muted {
+  font-size: 13px;
+  padding: 6px 14px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Action buttons */
+button.mat-icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+button.mat-icon-button[color="primary"] {
+  color: var(--primary-light);
+}
+
+button.mat-icon-button[color="warn"] {
+  color: var(--accent);
+}
+
+button.mat-icon-button:hover {
+  background: var(--surface) !important;
+}
+
+@media (max-width: 720px) {
+  .description-cell {
+    white-space: normal;
+    max-width: 200px;
+  }
+  .mat-table {
+    font-size: 14px;
+  }
+  .product-image {
+    width: 50px;
+    height: 50px;
+  }
+}

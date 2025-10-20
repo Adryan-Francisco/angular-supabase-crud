@@ -1,0 +1,100 @@
+<div class="home-container">
+  <div class="home-header">
+    <div class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ userEmail() }}</span>
+    </div>
+    <button mat-stroked-button (click)="onLogout()" class="logout-button">
+      <mat-icon>logout</mat-icon>
+      Sair
+    </button>
+  </div>
+
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Bem-vindo ao Dashboard</h1>
+      <p class="hero-subtitle">
+        Gerencie seus produtos de forma simples e eficiente
+      </p>
+
+      <div class="hero-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/products"
+          class="primary-btn"
+        >
+          <mat-icon>inventory_2</mat-icon>
+          Ver Produtos
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-illustration">
+      <div class="floating-card card-1">
+        <mat-icon>shopping_cart</mat-icon>
+      </div>
+      <div class="floating-card card-2">
+        <mat-icon>trending_up</mat-icon>
+      </div>
+      <div class="floating-card card-3">
+        <mat-icon>inventory</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="features-section">
+    <h2 class="section-title">Funcionalidades</h2>
+
+    <div class="features-grid">
+      <mat-card
+        *ngFor="let feature of features"
+        class="feature-card"
+        [routerLink]="feature.route"
+      >
+        <mat-card-content>
+          <div class="feature-icon">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+          <div class="feature-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>inventory_2</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>Produtos</h3>
+        <p class="stat-number">Gerencie seu catálogo</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>speed</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>Rápido</h3>
+        <p class="stat-number">Atualizações em tempo real</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>cloud_done</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>Supabase</h3>
+        <p class="stat-number">Banco de dados em nuvem</p>
+      </div>
+    </div>
+  </div>
+</div>

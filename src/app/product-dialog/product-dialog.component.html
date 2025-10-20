@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>
+  {{ data.product.id ? "Editar Produto" : "Novo Produto" }}
+</h1>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nome do Produto</mat-label>
+    <input
+      matInput
+      [(ngModel)]="data.product.name"
+      placeholder="Ex: Notebook Dell"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Descrição</mat-label>
+    <input
+      matInput
+      [(ngModel)]="data.product.description"
+      placeholder="Descrição detalhada do produto"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Preço (R$)</mat-label>
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="data.product.price"
+      placeholder="0.00"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>URL da Imagem</mat-label>
+    <input
+      matInput
+      [(ngModel)]="data.product.imageUrl"
+      placeholder="https://exemplo.com/imagem.jpg"
+    />
+  </mat-form-field>
+
+  <!-- Preview da Imagem -->
+  <div
+    class="image-preview"
+    *ngIf="data.product.imageUrl && data.product.imageUrl.trim()"
+  >
+    <p class="preview-label">Preview da Imagem</p>
+    <img
+      [src]="getImageUrl()"
+      [alt]="data.product.name || 'Preview do produto'"
+      (error)="onImageError($event)"
+    />
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Salvar</button>
+</div>

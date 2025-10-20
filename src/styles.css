@@ -1,0 +1,160 @@
+/* Global reset + modern design tokens */
+:root {
+  --primary: #0ea5e9; /* Sky-500 */
+  --primary-dark: #0284c7;
+  --primary-light: #38bdf8;
+  --accent: #06b6d4; /* Cyan-500 */
+  --accent-light: #22d3ee;
+  --bg-start: #0f172a; /* Slate-900 */
+  --bg-end: #1e293b; /* Slate-800 */
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-elevated: rgba(255, 255, 255, 0.1);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 20px rgba(14, 165, 233, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(14, 165, 233, 0.1) 0%,
+    transparent 70%
+  );
+  animation: rotate 30s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Utility container used by the app */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Modern glassmorphism card */
+.card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: 0.8;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow), var(--glow);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+/* Small typography helpers */
+.muted {
+  color: var(--muted);
+}
+
+/* Modern buttons */
+button.mat-raised-button,
+button.mat-stroked-button {
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button.mat-raised-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+}
+
+button.mat-icon-button {
+  transition: all 0.2s ease;
+}
+
+button.mat-icon-button:hover {
+  transform: scale(1.1);
+  background: var(--surface-elevated);
+}
+
+/* Dialogs with modern styling */
+.mat-dialog-container {
+  border-radius: 20px !important;
+  background: var(--surface) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
