@@ -44,6 +44,15 @@ export class SupabaseService {
     return data.user;
   }
 
+  async signup(email: string, password: string) {
+    const { data, error } = await this.supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data.user;
+  }
+
   async logout() {
     const { error } = await this.supabase.auth.signOut();
     if (error) throw error;

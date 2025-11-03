@@ -1,14 +1,14 @@
-<div class="login-container">
-  <div class="login-card card">
-    <div class="login-header">
+<div class="signup-container">
+  <div class="signup-card card">
+    <div class="signup-header">
       <div class="logo-icon">
-        <mat-icon>lock</mat-icon>
+        <mat-icon>person_add</mat-icon>
       </div>
-      <h1>Bem-vindo de volta</h1>
-      <p class="muted">Faça login para acessar o dashboard</p>
+      <h1>Criar Conta</h1>
+      <p class="muted">Crie sua conta para acessar o dashboard</p>
     </div>
 
-    <form (ngSubmit)="onLogin()" class="login-form">
+    <form (ngSubmit)="onSignup()" class="signup-form">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <input
@@ -48,11 +48,36 @@
         </button>
       </mat-form-field>
 
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirmar Senha</mat-label>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="••••••••"
+          required
+          [disabled]="loading"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          [disabled]="loading"
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
       <button
         mat-raised-button
         color="primary"
         type="submit"
-        class="login-button"
+        class="signup-button"
         [disabled]="loading"
       >
         <mat-spinner
@@ -60,14 +85,14 @@
           diameter="20"
           class="spinner"
         ></mat-spinner>
-        <span *ngIf="!loading">Entrar</span>
+        <span *ngIf="!loading">Cadastrar</span>
       </button>
     </form>
 
-    <div class="login-footer">
+    <div class="signup-footer">
       <p class="muted">
-        Não tem uma conta?
-        <a routerLink="/signup" class="login-link">Cadastre-se aqui</a>
+        Já tem uma conta?
+        <a routerLink="/login" class="signup-link">Faça login aqui</a>
       </p>
     </div>
   </div>
