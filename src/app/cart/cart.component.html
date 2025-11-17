@@ -1,0 +1,221 @@
+<div class="cart-container card">
+  <!-- Header -->
+  <div class="cart-header">
+    <div style="display: flex; align-items: center; gap: 16px">
+      <button
+        mat-icon-button
+        (click)="continueShopping()"
+        matTooltip="Voltar para Produtos"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div>
+        <h2 style="margin: 0">Meu Carrinho</h2>
+        <div class="muted" style="font-size: 13px">
+          {{ cartService.totalItems() }} item(ns) no carrinho
+        </div>
+      </div>
+    </div>
+
+    <button
+      mat-stroked-button
+      (click)="clearCart()"
+      color="warn"
+      [disabled]="cartService.isEmpty()"
+    >
+      <mat-icon>delete_sweep</mat-icon>
+      Limpar
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Carrinho Vazio -->
+  <div *ngIf="cartService.isEmpty()" class="empty-state">
+    <mat-icon style="font-size: 64px; width: 64px; height: 64px; color: #ccc"
+      >shopping_cart</mat-icon
+    >
+    <h3>Seu carrinho está vazio</h3>
+    <p>Adicione produtos para começar a comprar</p>
+    <button mat-raised-button color="primary" (click)="continueShopping()">
+      <mat-icon>shopping_bag</mat-icon>
+      Continuar Comprando
+    </button>
+  </div>
+
+  <!-- Itens do Carrinho -->
+  <div *ngIf="!cartService.isEmpty()" class="cart-content">
+    <!-- Tabela de Itens -->
+    <div class="items-section">
+      <h3 style="margin-bottom: 16px">Itens do Carrinho</h3>
+
+      <div class="cart-items">
+        <mat-card
+          *ngFor="let item of cartService.items()"
+          class="cart-item-card"
+        >
+          <div class="item-content">
+            <!-- Imagem -->
+            <img
+              [src]="
+                item.product.imageUrl ||
+                'https://via.placeholder.com/100?text=Produto'
+              "
+              alt="{{ item.product.name }}"
+              class="item-image"
+              (error)="onImageError($event)"
+            />
+
+            <!-- Informações do Produto -->
+            <div class="item-info">
+              <h4>{{ item.product.name }}</h4>
+              <p class="item-description">
+                {{ item.product.description || '-' }}
+              </p>
+              <p class="item-price">
+                {{ item.product.price | currency : 'BRL' }}
+              </p>
+            </div>
+
+            <!-- Quantidade -->
+            <div class="item-quantity">
+              <button
+                mat-icon-button
+                (click)="cartService.decrementQuantity(item.product.id)"
+                [disabled]="item.quantity <= 1"
+                matTooltip="Diminuir"
+              >
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="quantity-value">{{ item.quantity }}</span>
+              <button
+                mat-icon-button
+                (click)="cartService.incrementQuantity(item.product.id)"
+                matTooltip="Aumentar"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+            <!-- Subtotal -->
+            <div class="item-subtotal">
+              <p style="font-weight: bold">
+                {{
+                  item.product.price * item.quantity
+                    | currency : 'BRL'
+                }}
+              </p>
+              <span class="quantity-label"
+                >{{ item.quantity }} × {{ item.product.price | currency : 'BRL' }}</span
+              >
+            </div>
+
+            <!-- Botão Remover -->
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="cartService.removeFromCart(item.product.id)"
+              matTooltip="Remover do Carrinho"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Resumo e Frete -->
+    <div class="summary-section">
+      <mat-card class="summary-card">
+        <!-- CEP para Frete -->
+        <div class="cep-section">
+          <h4>Cálculo de Frete</h4>
+          <mat-form-field appearance="outline">
+            <mat-label>CEP (8 dígitos)</mat-label>
+            <input
+              matInput
+              placeholder="00000000"
+              [(ngModel)]="cepInput"
+              (change)="onCepChange(cepInput)"
+              maxlength="8"
+            />
+            <mat-icon matSuffix *ngIf="!showCepError && cepInput.length === 8"
+              >check_circle</mat-icon
+            >
+            <mat-icon
+              matSuffix
+              *ngIf="showCepError"
+              color="warn"
+            >
+              error
+            </mat-icon>
+          </mat-form-field>
+
+          <p *ngIf="showCepError" class="error-message">
+            CEP deve conter 8 dígitos
+          </p>
+
+          <p *ngIf="cartService.cepValue()" class="success-message">
+            CEP registrado: {{ cartService.cepValue() }}
+          </p>
+
+          <p class="info-message">
+            <mat-icon>info</mat-icon>
+            Frete grátis para compras acima de R$ 100,00
+          </p>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Cálculos -->
+        <div class="calculations">
+          <div class="calc-row">
+            <span>Subtotal:</span>
+            <span>{{ cartService.subtotal() | currency : 'BRL' }}</span>
+          </div>
+
+          <div class="calc-row" [style.color]="cartService.shippingCost() === 0 ? '#4caf50' : '#666'">
+            <span>Frete:</span>
+            <span>
+              <span *ngIf="cartService.shippingCost() === 0" class="free-shipping"
+                >GRÁTIS</span
+              >
+              <span *ngIf="cartService.shippingCost() > 0">{{
+                cartService.shippingCost() | currency : 'BRL'
+              }}</span>
+            </span>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="calc-row total">
+            <span>Total:</span>
+            <span>{{ cartService.total() | currency : 'BRL' }}</span>
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="action-buttons">
+          <button
+            mat-stroked-button
+            (click)="continueShopping()"
+            color="accent"
+          >
+            <mat-icon>arrow_back</mat-icon>
+            Continuar Comprando
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="goToCheckout()"
+            [disabled]="cartService.isEmpty()"
+          >
+            <mat-icon>done_all</mat-icon>
+            Ir para Resumo
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

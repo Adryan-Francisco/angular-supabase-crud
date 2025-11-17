@@ -1,0 +1,145 @@
+<div class="checkout-container card">
+  <!-- Confirmação Bem-sucedida -->
+  <div *ngIf="orderConfirmed" class="success-state">
+    <div class="success-icon">
+      <mat-icon>check_circle</mat-icon>
+    </div>
+    <h2>Pedido Confirmado!</h2>
+    <p>Seu pedido foi realizado com sucesso.</p>
+    <p class="order-id">Número do Pedido: <strong>{{ orderId }}</strong></p>
+    <p class="redirect-message">
+      Você será redirecionado em instantes...
+    </p>
+  </div>
+
+  <!-- Resumo da Compra -->
+  <div *ngIf="!orderConfirmed" class="checkout-content">
+    <!-- Header -->
+    <div class="checkout-header">
+      <button
+        mat-icon-button
+        (click)="backToCart()"
+        matTooltip="Voltar para Carrinho"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2 style="margin: 0">Resumo do Pedido</h2>
+      <div style="width: 40px"></div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Conteúdo -->
+    <div class="checkout-grid">
+      <!-- Itens -->
+      <div class="items-column">
+        <h3>Itens do Pedido</h3>
+
+        <div class="items-list">
+          <div *ngFor="let item of cartService.items()" class="checkout-item">
+            <img
+              [src]="
+                item.product.imageUrl ||
+                'https://via.placeholder.com/80?text=Produto'
+              "
+              alt="{{ item.product.name }}"
+              class="checkout-item-image"
+              (error)="onImageError($event)"
+            />
+            <div class="checkout-item-info">
+              <h4>{{ item.product.name }}</h4>
+              <p class="item-description">
+                {{ item.product.description || '-' }}
+              </p>
+              <p class="item-meta">
+                Qtd: <strong>{{ item.quantity }}</strong> ×
+                <strong>{{ item.product.price | currency : 'BRL' }}</strong>
+              </p>
+            </div>
+            <div class="checkout-item-subtotal">
+              {{
+                item.product.price * item.quantity
+                  | currency : 'BRL'
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumo Financeiro -->
+      <div class="summary-column">
+        <mat-card class="summary-card">
+          <h3>Resumo Financeiro</h3>
+
+          <!-- Informações do Cliente -->
+          <div class="customer-section">
+            <h4>CEP de Entrega</h4>
+            <p class="cep-value">{{ cartService.cepValue() }}</p>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Cálculos -->
+          <div class="calculations">
+            <div class="calc-row">
+              <span>Subtotal ({{ cartService.totalItems() }} item(ns)):</span>
+              <span>{{ cartService.subtotal() | currency : 'BRL' }}</span>
+            </div>
+
+            <div
+              class="calc-row"
+              [style.color]="
+                cartService.shippingCost() === 0 ? '#4caf50' : '#666'
+              "
+            >
+              <span>Frete:</span>
+              <span>
+                <span
+                  *ngIf="cartService.shippingCost() === 0"
+                  class="free-shipping"
+                  >GRÁTIS</span
+                >
+                <span *ngIf="cartService.shippingCost() > 0">{{
+                  cartService.shippingCost() | currency : 'BRL'
+                }}</span>
+              </span>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="calc-row total">
+              <span>Total a Pagar:</span>
+              <span>{{ cartService.total() | currency : 'BRL' }}</span>
+            </div>
+          </div>
+
+          <!-- Info Frete Grátis -->
+          <div
+            *ngIf="cartService.shippingCost() === 0"
+            class="free-shipping-badge"
+          >
+            <mat-icon>local_shipping</mat-icon>
+            Frete Grátis - Compra acima de R$ 100,00
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="action-buttons">
+            <button mat-stroked-button (click)="backToCart()" color="accent">
+              <mat-icon>edit</mat-icon>
+              Voltar e Editar
+            </button>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="confirmPurchase()"
+            >
+              <mat-icon>done</mat-icon>
+              Confirmar Compra
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

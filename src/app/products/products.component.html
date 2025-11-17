@@ -1,5 +1,5 @@
 <div class="products-container card">
-  <div
+    <div
     class="products-header"
     style="
       display: flex;
@@ -27,10 +27,39 @@
       </div>
     </div>
 
-    <button mat-stroked-button (click)="onLogout()" class="logout-button">
-      <mat-icon>logout</mat-icon>
-      Sair
-    </button>
+    <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
+      <button
+        mat-stroked-button
+        (click)="navigateToCart()"
+        class="cart-button"
+        style="position: relative"
+      >
+        <mat-icon>shopping_cart</mat-icon>
+        Carrinho
+        <span
+          style="
+            margin-left: 8px;
+            background: #ff4081;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+          "
+        >
+          {{ cartService.totalItems() }}
+        </span>
+      </button>
+
+      <button mat-stroked-button (click)="onLogout()" class="logout-button">
+        <mat-icon>logout</mat-icon>
+        Sair
+      </button>
+    </div>
   </div>
 
   <div class="table-wrap">
@@ -96,6 +125,14 @@
             matTooltip="Excluir"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="accent"
+            (click)="addToCart(product)"
+            matTooltip="Adicionar ao Carrinho"
+          >
+            <mat-icon>shopping_cart</mat-icon>
           </button>
         </td>
       </ng-container>

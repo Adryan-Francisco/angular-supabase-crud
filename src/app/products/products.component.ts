@@ -7,6 +7,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SupabaseService } from "../services/supabase.service";
+import { CartService } from "../services/cart.service";
 import { Product } from "../models/product";
 import { ProductDialogComponent } from "../product-dialog/product-dialog.component";
 
@@ -39,6 +40,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private supabaseService: SupabaseService,
+    public cartService: CartService,
     private dialog: MatDialog,
     private router: Router
   ) {}
@@ -108,5 +110,14 @@ export class ProductsComponent implements OnInit {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.src = "https://via.placeholder.com/60?text=Sem+Imagem";
+  }
+
+  addToCart(product: Product) {
+    this.cartService.addToCart(product);
+    alert(`${product.name} adicionado ao carrinho!`);
+  }
+
+  navigateToCart() {
+    this.router.navigate(["/cart"]);
   }
 }
