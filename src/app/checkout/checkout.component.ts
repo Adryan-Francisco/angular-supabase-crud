@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { CartService } from '../services/cart.service';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-checkout',
@@ -22,29 +23,68 @@ import { CartService } from '../services/cart.service';
 })
 export class CheckoutComponent {
   cartService = inject(CartService);
+  supabaseService = inject(SupabaseService);
   router = inject(Router);
 
   orderConfirmed = false;
   orderId = '';
+  isLoading = false;
+  errorMessage = '';
 
   /**
    * Confirma a compra
    */
-  confirmPurchase() {
+  async confirmPurchase() {
     if (!this.cartService.isEmpty() && this.cartService.cepValue()) {
-      // Simula a criação de um pedido
-      this.orderId = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+      this.isLoading = true;
+      this.errorMessage = '';
 
-      // Aqui você poderia fazer uma chamada ao serviço Supabase para salvar o pedido
-      // await this.orderService.createOrder(this.cartService.getCartSummary());
+      try {
+        const userId = this.supabaseService.user()?.id;
+        
+        if (!userId) {
+          this.errorMessage = 'Usuário não autenticado';
+          this.isLoading = false;
+          return;
+        }
 
-      this.orderConfirmed = true;
+        // Gera ID único do pedido
+        const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
 
-      // Limpa o carrinho após 2 segundos e redireciona
-      setTimeout(() => {
-        this.cartService.clearCart();
-        this.router.navigate(['/products']);
-      }, 3000);
+        // Prepara os dados do pedido
+        const order = {
+          user_id: userId,
+          order_id: orderNumber,
+          items: this.cartService.items().map(item => ({
+            productId: item.product.id,
+            productName: item.product.name,
+            quantity: item.quantity,
+            price: item.product.price,
+            image: item.product.imageUrl,
+          })),
+          subtotal: this.cartService.subtotal(),
+          shipping_cost: this.cartService.shippingCost(),
+          total: this.cartService.total(),
+          cep: this.cartService.cepValue(),
+          status: 'pendente',
+        };
+
+        // Salva o pedido no Supabase
+        await this.supabaseService.createOrder(order);
+
+        this.orderId = orderNumber;
+        this.orderConfirmed = true;
+
+        // Limpa o carrinho após 2 segundos e redireciona
+        setTimeout(() => {
+          this.cartService.clearCart();
+          this.router.navigate(['/products']);
+        }, 3000);
+      } catch (error) {
+        console.error('Erro ao confirmar compra:', error);
+        this.errorMessage = 'Erro ao processar pedido. Tente novamente.';
+        this.isLoading = false;
+      }
     }
   }
 

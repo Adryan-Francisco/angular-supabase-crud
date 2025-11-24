@@ -124,7 +124,12 @@
 
           <!-- Botões de Ação -->
           <div class="action-buttons">
-            <button mat-stroked-button (click)="backToCart()" color="accent">
+            <button 
+              mat-stroked-button 
+              (click)="backToCart()" 
+              color="accent"
+              [disabled]="isLoading"
+            >
               <mat-icon>edit</mat-icon>
               Voltar e Editar
             </button>
@@ -133,10 +138,18 @@
               mat-raised-button
               color="primary"
               (click)="confirmPurchase()"
+              [disabled]="isLoading"
             >
-              <mat-icon>done</mat-icon>
-              Confirmar Compra
+              <mat-icon *ngIf="!isLoading">done</mat-icon>
+              <mat-icon *ngIf="isLoading" class="spinner">hourglass_empty</mat-icon>
+              {{ isLoading ? 'Processando...' : 'Confirmar Compra' }}
             </button>
+          </div>
+
+          <!-- Mensagem de Erro -->
+          <div *ngIf="errorMessage" class="error-message">
+            <mat-icon>error_outline</mat-icon>
+            {{ errorMessage }}
           </div>
         </mat-card>
       </div>

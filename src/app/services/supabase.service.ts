@@ -1,6 +1,7 @@
 import { Injectable, signal } from "@angular/core";
 import { createClient, SupabaseClient, User } from "@supabase/supabase-js";
 import { Product } from "../models/product";
+import { Order } from "../models/order";
 import { environment } from "../../environments/environment";
 
 @Injectable({ providedIn: "root" })
@@ -126,6 +127,71 @@ export class SupabaseService {
       await this.loadProducts();
     } catch (error) {
       console.error("Erro na operação deleteProduct:", error);
+      throw error;
+    }
+  }
+
+  // -------------------------
+  // Pedidos (CRUD)
+  // -------------------------
+
+  async createOrder(order: Order) {
+    try {
+      const { data, error } = await this.supabase
+        .from("orders")
+        .insert([order])
+        .select();
+      
+      if (error) {
+        console.error("Erro ao criar pedido:", error);
+        throw error;
+      }
+      
+      console.log("Pedido criado com sucesso:", data);
+      return data?.[0];
+    } catch (error) {
+      console.error("Erro na operação createOrder:", error);
+      throw error;
+    }
+  }
+
+  async getOrdersByUser(userId: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+      
+      if (error) {
+        console.error("Erro ao carregar pedidos:", error);
+        throw error;
+      }
+      
+      console.log("Pedidos carregados:", data?.length);
+      return data as Order[];
+    } catch (error) {
+      console.error("Erro na operação getOrdersByUser:", error);
+      throw error;
+    }
+  }
+
+  async getOrderById(orderId: string) {
+    try {
+      const { data, error } = await this.supabase
+        .from("orders")
+        .select("*")
+        .eq("id", orderId)
+        .single();
+      
+      if (error) {
+        console.error("Erro ao carregar pedido:", error);
+        throw error;
+      }
+      
+      return data as Order;
+    } catch (error) {
+      console.error("Erro na operação getOrderById:", error);
       throw error;
     }
   }
